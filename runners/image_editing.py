@@ -79,15 +79,14 @@ class Diffusion(object):
         elif self.model_var_type == 'fixedsmall':
             self.logvar = np.log(np.maximum(posterior_variance, 1e-20))
 
-    def image_editing_sample(self):
+    # It's recommended to download the checkpoint files manually to ~\.cache\torch\hub\checkpoints\
+    def image_editing_sample(self, img, mask):
         print("Loading model")
         if self.config.data.dataset == "LSUN":
             if self.config.data.category == "bedroom":
-                url = "https://image-editing-test-12345.s3-us-west-2.amazonaws.com/checkpoints/bedroom.ckpt"
-            elif self.config.data.category == "church_outdoor":
-                url = "https://image-editing-test-12345.s3-us-west-2.amazonaws.com/checkpoints/church_outdoor.ckpt"
+                url = "https://huggingface.co/XUXR/SDEdit/resolve/main/lsun_bedroom.ckpt"
         elif self.config.data.dataset == "CelebA_HQ":
-            url = "https://image-editing-test-12345.s3-us-west-2.amazonaws.com/checkpoints/celeba_hq.ckpt"
+            url = "https://huggingface.co/XUXR/SDEdit/resolve/main/celeba_hq.ckpt"
         else:
             raise ValueError
 
@@ -99,14 +98,11 @@ class Diffusion(object):
         print("Model loaded")
         ckpt_id = 0
 
-        download_process_data(path="colab_demo")
+        # download_process_data(path="colab_demo")
         n = self.config.sampling.batch_size
         model.eval()
         print("Start sampling")
         with torch.no_grad():
-            name = self.args.npy_name
-            [mask, img] = torch.load("colab_demo/{}.pth".format(name))
-
             mask = mask.to(self.config.device)
             img = img.to(self.config.device)
             img = img.unsqueeze(dim=0)

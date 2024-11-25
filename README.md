@@ -35,9 +35,8 @@ The key intuition of SDEdit is to "hijack" the reverse stochastic process of SDE
 
 ## Getting Started
 The code will automatically download pretrained SDE (VP) PyTorch models on
-[CelebA-HQ](https://image-editing-test-12345.s3-us-west-2.amazonaws.com/checkpoints/celeba_hq.ckpt),
-[LSUN bedroom](https://image-editing-test-12345.s3-us-west-2.amazonaws.com/checkpoints/bedroom.ckpt),
-and [LSUN church outdoor](https://image-editing-test-12345.s3-us-west-2.amazonaws.com/checkpoints/church_outdoor.ckpt).
+[CelebA-HQ](https://huggingface.co/XUXR/SDEdit/resolve/main/celeba_hq.ckpt),
+[LSUN bedroom](https://huggingface.co/XUXR/SDEdit/blob/main/celeba_hq.ckpt),  
 
 ### Data format
 We save the image and the corresponding mask in an array format ``[image, mask]``, where
@@ -57,10 +56,10 @@ SDEdit can synthesize multiple diverse outputs for each input on LSUN bedroom, L
 To generate results on LSUN datasets, please run
 
 ```
-python main.py --exp ./runs/ --config bedroom.yml --sample -i images --npy_name lsun_bedroom1 --sample_step 3 --t 500  --ni
+python main.py --exp ./runs/  --config celeba.yml --img path_to_img.jpg --sample -i images --sample_step 3 --t 500  --ni
 ```
 ```
-python main.py --exp ./runs/ --config church.yml --sample -i images --npy_name lsun_church --sample_step 3 --t 500  --ni
+python main.py --exp ./runs/ --config church.yml --sample -i images --img path_to_img.jpg --sample_step 3 --t 500  --ni
 ```
 
 <p align="center">
@@ -73,11 +72,7 @@ SDEdit can generate image edits that are both realistic and faithful (to the use
 <p align="center">
 <img src="https://github.com/ermongroup/SDEdit/blob/main/images/stroke_edit.jpg" width="800">
 </p>
-To perform stroke-based image editing, run
 
-```
-python main.py --exp ./runs/  --config church.yml --sample -i images --npy_name lsun_edit --sample_step 3 --t 500  --ni
-```
 
 ## Additional results
 <p align="center">

@@ -7,10 +7,30 @@ import sys
 import os
 import torch
 import numpy as np
+from PIL import Image
 import torch.utils.tensorboard as tb
 import copy
 
 from runners.image_editing import Diffusion
+
+
+def load_image(image_path):
+    image = Image.open(image_path).convert('RGB')
+    image = image.resize((256, 256))  # Resize the image to 256x256
+    image = np.array(image).astype(np.float32) / 255.0
+    image_tensor = torch.from_numpy(image).permute(2, 0, 1)  # Convert to PyTorch tensor and rearrange dimensions
+    return image_tensor
+
+def create_full_mask(image_tensor):
+    _, height, width = image_tensor.shape
+    mask = np.ones((height, width), dtype=np.float32)
+    mask_tensor = torch.from_numpy(mask).unsqueeze(0).repeat(3,1,1)  # Convert to PyTorch tensor and add channel dimension
+    return mask_tensor
+
+def image_and_mask(image_path):
+    image_tensor = load_image(image_path)
+    mask_tensor = create_full_mask(image_tensor)
+    return image_tensor, mask_tensor
 
 
 def parse_args_and_config():
@@ -23,9 +43,9 @@ def parse_args_and_config():
     parser.add_argument('--sample', action='store_true', help='Whether to produce samples from the model')
     parser.add_argument('-i', '--image_folder', type=str, default='images', help="The folder name of samples")
     parser.add_argument('--ni', action='store_true', help="No interaction. Suitable for Slurm Job launcher")
-    parser.add_argument('--npy_name', type=str, required=True)
     parser.add_argument('--sample_step', type=int, default=3, help='Total sampling steps')
     parser.add_argument('--t', type=int, default=400, help='Sampling noise scale')
+    parser.add_argument('--img', type=str, default=r"C:\Users\Administrator\Desktop\media\kadid-i03\I03_02_05.png", help='Image name')
     args = parser.parse_args()
 
     # parse config file
@@ -101,7 +121,7 @@ def main():
 
     try:
         runner = Diffusion(args, config)
-        runner.image_editing_sample()
+        runner.image_editing_sample(*image_and_mask(args.img))
     except Exception:
         logging.error(traceback.format_exc())
 
