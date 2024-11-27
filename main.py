@@ -7,13 +7,10 @@ import sys
 import os
 import torch
 import numpy as np
-from PIL import Image
 import torch.utils.tensorboard as tb
 import copy
 
 from runners.image_editing import Diffusion
-
-
 
 
 def parse_args_and_config():
