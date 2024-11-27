@@ -35,7 +35,7 @@ def get_checkpoint(dataset, category):
     if category == "bedroom":
         url = "https://huggingface.co/gwang-kim/DiffusionCLIP-LSUN_Bedroom/resolve/main/bedroom.ckpt"
     elif category == "church_outdoor":
-        url = "https://image-editing-test-12345.s3-us-west-2.amazonaws.com/checkpoints/church_outdoor.ckpt"
+        url = r"C:\Users\Administrator\Downloads\ema_lsun_church.ckpt"
     elif dataset == "CelebA_HQ":
         url = "https://image-editing-test-12345.s3-us-west-2.amazonaws.com/checkpoints/celeba_hq.ckpt"
     else:
